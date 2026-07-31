@@ -5,8 +5,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('@/pages/MainPage.vue'),
+      redirect: { name: 'call-monitoring' },
+    },
+    {
+      path: '/call-monitoring',
+      name: 'call-monitoring',
+      component: () => import('@/pages/CallMonitoringPage.vue'),
     },
   ],
 })
