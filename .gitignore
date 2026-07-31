@@ -2,3 +2,7 @@ node_modules/
 dist/
 dist-ssr/
 *.local
+
+# Nuxt UI auto-generated type declarations
+frontend/auto-imports.d.ts
+frontend/components.d.ts
