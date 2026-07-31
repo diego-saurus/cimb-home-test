@@ -1,10 +1,8 @@
 spring:
-  application:
-    name: demo
   datasource:
     url: ${DB_URL:jdbc:postgresql://192.168.18.228:8124/cimb}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:Kra1KozHO65imF0UcWAjN95jU14AiRHbzjxfcWvAYjlcS8zr8SihVxhFaUdd6mca}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -12,20 +10,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-        jdbc:
-          time_zone: UTC
-    open-in-view: false
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
-
-cimb:
-  callmonitoring:
-    default-page-size: 5
-    max-page-size: 200
-
-logging:
-  level:
-    dev.diegosaurus.cimb.callmonitoring: INFO
