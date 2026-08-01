@@ -23,7 +23,7 @@ const presets = [
 
 <template>
   <UPopover v-model:open="isOpen">
-    <UButton color="neutral" variant="subtle" icon="i-lucide-calendar" :aria-label="triggerLabel">
+    <UButton color="neutral" variant="outline" icon="i-lucide-calendar" :aria-label="triggerLabel">
       {{ triggerLabel }}
     </UButton>
 
@@ -48,10 +48,12 @@ const presets = [
             v-model="draft"
             class="p-2"
             :year-controls="false"
+            :view-control="false"
             :number-of-months="isDesktop ? 2 : 1"
             :min-value="minValue"
             :max-value="maxValue"
             :is-date-unavailable="isDateUnavailable"
+            :placeholder="initialPlaceholder"
             range
           />
         </div>
@@ -80,6 +82,7 @@ const todayValue = today(tz)
 
 const minValue = todayValue.subtract({ months: MAX_MONTHS_LOOKBACK })
 const maxValue = todayValue
+const initialPlaceholder = todayValue.subtract({ months: 1 })
 
 function isDateUnavailable(date: DateValue): boolean {
   return date.compare(minValue) < 0 || date.compare(maxValue) > 0

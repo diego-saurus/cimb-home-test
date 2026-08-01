@@ -29,4 +29,3 @@ export function useTableState() {
 }
 
 export type TableState = ReturnType<typeof useTableState>
-

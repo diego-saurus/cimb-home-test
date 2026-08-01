@@ -32,16 +32,21 @@ import { unwrap } from '@/lib/utils'
 const UBadge = resolveComponent('UBadge')
 
 const tableState = useTableState()
-const { startDate, endDate } = useCallMonitoringFilter()
+const { startDate, endDate, sentiment } = useCallMonitoringFilter()
 const { search, sortBy, sortDirection, pageIndex, page } = tableState
 
-const params = () => ({
-  search: toValue(search),
-  sortBy: toValue(sortBy),
-  direction: toValue(sortDirection),
-  page: toValue(pageIndex),
-  startDate: toValue(startDate),
-  endDate: toValue(endDate),
+const params = computed(() => {
+  const sentimentValue = sentiment.value === 'all' ? undefined : sentiment.value
+
+  return {
+    search: toValue(search),
+    sortBy: toValue(sortBy),
+    direction: toValue(sortDirection),
+    page: toValue(pageIndex),
+    startDate: toValue(startDate),
+    endDate: toValue(endDate),
+    sentiment: sentimentValue,
+  }
 })
 
 watch([startDate, endDate], () => {
@@ -49,8 +54,9 @@ watch([startDate, endDate], () => {
 })
 
 const { data, isPlaceholderData, isPending } = useQuery({
-  key: () => ['call-monitorings', params()],
-  query: ({ signal }) => satellite.get<Page<CallRecord>>('/call-monitoring', { signal, params: params() }).then(unwrap),
+  key: () => ['call-monitorings', params.value],
+  query: ({ signal }) =>
+    satellite.get<Page<CallRecord>>('/call-monitoring', { signal, params: params.value }).then(unwrap),
   placeholderData: (prev) => prev,
 })
 
