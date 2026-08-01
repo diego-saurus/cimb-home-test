@@ -32,6 +32,11 @@ spring:
       include-stacktrace: never
       include-binding-errors: never
 
+cimb:
+  cors:
+    # Override via the CORS_ALLOWED_ORIGINS env var in production (comma-separated).
+    allowed-origins: []
+
 logging:
   level:
     root: INFO

@@ -102,6 +102,21 @@ class CallMonitoringControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void returns404ForUnknownRoute() throws Exception {
+        mockMvc.perform(get("/api/not-real"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("not_found"));
+    }
+
+    @Test
+    void returns405ForUnsupportedMethod() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .post("/api/call-monitoring"))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.error").value("method_not_allowed"));
+    }
+
     @EnableConfigurationProperties(CallMonitoringProperties.class)
     static class PropsConfig {
     }
