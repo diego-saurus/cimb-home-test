@@ -1,35 +1,27 @@
+import { refDebounced } from '@vueuse/core'
 import { useRouteQuery } from '@vueuse/router'
-import { computed, provide, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 
-import type { CallRecord } from '@/types/call'
-
-import { SortingKey } from '@/providers/sorting'
+import { useSortingState } from './useSortingState'
 
 export function useTableState() {
   const search = useRouteQuery<string>('s', '')
+  const debouncedSearch = refDebounced(search)
+
   const page = useRouteQuery<number>('page', 1, { transform: Number })
-
-  const sortBy = ref<keyof CallRecord>('callTimestamp')
-  const sortDirection = ref<'asc' | 'desc'>('desc')
-
   const pageIndex = computed(() => page.value - 1)
 
-  const toggleSortDirection = () => (sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc')
+  const { sortBy, sortDirection, toggleSortDirection } = useSortingState()
 
   watch([search, sortBy, sortDirection], () => {
     page.value = 1
-  })
-
-  provide(SortingKey, {
-    sortBy,
-    sortDirection,
-    toggleSortDirection,
   })
 
   return {
     search,
     sortBy,
     sortDirection,
+    debouncedSearch,
     page,
     pageIndex,
     toggleSortDirection,
