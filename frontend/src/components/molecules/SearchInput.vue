@@ -1,5 +1,12 @@
 <template>
-  <UInput v-model="modelValue" icon="i-lucide-search" class="w-full sm:max-w-sm" size="lg" :placeholder>
+  <UInput
+    v-model="modelValue"
+    icon="i-lucide-search"
+    class="w-full sm:max-w-sm group"
+    size="lg"
+    variant="none"
+    :placeholder
+  >
     <template v-if="modelValue" #trailing>
       <UButton
         size="xs"
@@ -7,6 +14,7 @@
         variant="ghost"
         icon="i-lucide-x"
         aria-label="Clear search"
+        class="opacity-0 group-hover:opacity-100 transition-opacity group-focus-within:opacity-100"
         @click="modelValue = ''"
       />
     </template>

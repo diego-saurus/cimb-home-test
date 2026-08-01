@@ -9,30 +9,33 @@ import type { Page } from '@/types/page'
 import TableToolbar from '@/components/organisms/TableToolbar.vue'
 
 interface Props<T> {
-  data?: Page<T>
-  columns: TableColumn<T>[]
-  isLoading?: boolean
   tableState: TableState
+  columns: TableColumn<T>[]
+  title: string
+  description: string
+
+  data?: Page<T>
+  isLoading?: boolean
 }
 </script>
 
 <template>
   <UContainer class="py-8">
     <header class="mb-6">
-      <h1 class="text-2xl font-semibold text-highlighted">Call Monitoring</h1>
+      <h1 class="text-2xl font-semibold text-highlighted">{{ title }}</h1>
       <p class="mt-1 text-sm text-muted">
-        View and process customer call monitoring data to identify calls that require attention.
+        {{ description }}
       </p>
     </header>
 
-    <section class="mb-4">
+    <section class="py-4 px-4 ring ring-default rounded-t-lg">
       <TableToolbar>
         <slot name="toolbar" />
       </TableToolbar>
     </section>
 
     <section class="relative">
-      <div class="overflow-hidden rounded-lg ring ring-default bg-default">
+      <div class="overflow-hidden ring ring-default bg-default rounded-b-lg">
         <UTable
           class="flex-1"
           :columns
@@ -42,6 +45,10 @@ interface Props<T> {
           }"
           :loading="isLoading"
           :data="data?.content"
+          :ui="{
+            th: 'border-l first:border-l-0 last:border-r-0 border-r border-default',
+            td: 'px-6',
+          }"
         >
           <template #empty>
             <EmptyState
@@ -52,7 +59,7 @@ interface Props<T> {
           </template>
         </UTable>
 
-        <div class="flex items-center border-t border-default py-4 px-4">
+        <div class="flex items-center flex-col sm:flex-row justify-between gap-4 px-4 py-3.5 border-t border-muted">
           <div class="flex-1 text-sm">
             Showing <span class="text-secondary font-medium"> {{ rangeStart }}-{{ rangeEnd }} </span> of
             <span class="text-secondary font-medium">

@@ -20,7 +20,14 @@ import { unwrap } from '@/lib/utils'
 
 <template>
   <UMain>
-    <DataTableContainer :data :columns :table-state :isLoading="isPlaceholderData || isPending">
+    <DataTableContainer
+      title="Call Monitoring"
+      description="View and process customer call monitoring data to identify calls that require attention."
+      :data
+      :columns
+      :table-state
+      :isLoading="isPlaceholderData || isPending"
+    >
       <template v-slot:toolbar>
         <CallMonitoringFilter />
       </template>
