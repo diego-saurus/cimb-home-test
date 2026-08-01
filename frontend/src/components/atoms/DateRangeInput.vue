@@ -11,6 +11,14 @@ type DateRange = { start: DateValue | undefined; end: DateValue | undefined }
 type Props = { triggerPlaceholder?: string }
 
 const MAX_MONTHS_LOOKBACK = 3
+
+const presets = [
+  { label: 'Last 7 days', days: 7 },
+  { label: 'Last 14 days', days: 14 },
+  { label: 'Last 1 month', months: 1 },
+  { label: 'Last 2 month', months: 2 },
+  { label: 'Last 3 months', months: MAX_MONTHS_LOOKBACK },
+]
 </script>
 
 <template>
@@ -39,9 +47,11 @@ const MAX_MONTHS_LOOKBACK = 3
           <UCalendar
             v-model="draft"
             class="p-2"
+            :year-controls="false"
             :number-of-months="isDesktop ? 2 : 1"
             :min-value="minValue"
             :max-value="maxValue"
+            :is-date-unavailable="isDateUnavailable"
             range
           />
         </div>
@@ -71,6 +81,10 @@ const todayValue = today(tz)
 const minValue = todayValue.subtract({ months: MAX_MONTHS_LOOKBACK })
 const maxValue = todayValue
 
+function isDateUnavailable(date: DateValue): boolean {
+  return date.compare(minValue) < 0 || date.compare(maxValue) > 0
+}
+
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const isDesktop = breakpoints.greaterOrEqual('sm')
 
@@ -84,13 +98,6 @@ watch(
   },
   { immediate: true }
 )
-
-const presets = [
-  { label: 'Last 7 days', days: 7 },
-  { label: 'Last 14 days', days: 14 },
-  { label: 'Last 30 days', days: 30 },
-  { label: 'Last 3 months', months: MAX_MONTHS_LOOKBACK },
-]
 
 function selectPreset(range: (typeof presets)[number]) {
   const end = today(tz)
@@ -114,7 +121,11 @@ function normalize(range: DateRange): DateRange {
   return range
 }
 
-const canApply = computed(() => !!(draft.value.start && draft.value.end))
+const canApply = computed(() => {
+  const { start, end } = draft.value
+  if (!start || !end) return false
+  return true
+})
 
 function apply() {
   if (!canApply.value) return
