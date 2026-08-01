@@ -50,8 +50,8 @@ public class InMemoryCallMonitoringRepository implements CallMonitoringRepositor
         return switch (sortBy) {
             case "callId" -> Comparator.comparing(CallMonitoring::getCallId);
             case "callTimestamp" -> Comparator.comparing(CallMonitoring::getCallTimestamp);
-            case "csAgentName" -> Comparator.comparing(cm -> cm.getCsAgent().getCsName());
-            case "customerName" -> Comparator.comparing(cm -> cm.getCustomer().getCustomerName());
+            case "csAgentName", "csAgent.csName" -> Comparator.comparing(cm -> cm.getCsAgent().getCsName());
+            case "customerName", "customer.customerName" -> Comparator.comparing(cm -> cm.getCustomer().getCustomerName());
             case "sentimentScore" -> Comparator.comparing(CallMonitoring::getSentimentScore);
             default -> null;
         };

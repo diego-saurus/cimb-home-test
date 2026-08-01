@@ -82,6 +82,26 @@ class CallMonitoringControllerTest {
                 .andExpect(jsonPath("$.error").value("invalid_sort_column"));
     }
 
+    @Test
+    void acceptsCustomerNameSortBy() throws Exception {
+        when(service.search(any())).thenReturn(new PageImpl<>(List.of()));
+
+        mockMvc.perform(get("/api/call-monitoring")
+                        .param("sortBy", "customerName")
+                        .param("direction", "asc"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void acceptsCsAgentNameSortBy() throws Exception {
+        when(service.search(any())).thenReturn(new PageImpl<>(List.of()));
+
+        mockMvc.perform(get("/api/call-monitoring")
+                        .param("sortBy", "csAgentName")
+                        .param("direction", "asc"))
+                .andExpect(status().isOk());
+    }
+
     @EnableConfigurationProperties(CallMonitoringProperties.class)
     static class PropsConfig {
     }
