@@ -9,7 +9,7 @@ import { useSortingContext } from '@/providers/sorting'
 <template>
   <UButton
     :label
-    :trailingIcon="isDesc ? 'i-lucide-arrow-down-wide-narrow' : 'i-lucide-arrow-up-narrow-wide'"
+    :trailingIcon="isDesc ? 'i-ph:sort-ascending' : 'i-ph:sort-descending'"
     :ui="{
       base: 'group px-1 py-1',
       trailingIcon: ['group-hover:opacity-100  transition-opacity', isCurrentlySort ? 'opacity-100' : 'opacity-0'],

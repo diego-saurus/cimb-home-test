@@ -3,6 +3,7 @@ import type { DateValue } from '@internationalized/date'
 
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import { isOmittedExpression } from 'typescript'
 import { computed, ref, shallowRef, watch } from 'vue'
 
 import { dateMedium } from '@/lib/formatter/date'
@@ -23,7 +24,13 @@ const presets = [
 
 <template>
   <UPopover v-model:open="isOpen">
-    <UButton color="neutral" variant="outline" icon="i-lucide-calendar" :aria-label="triggerLabel">
+    <UButton
+      color="neutral"
+      variant="outline"
+      :icon="startDate ? 'i-ph:calendar-check' : 'i-ph:calendar-dots'"
+      :aria-label="triggerLabel"
+      :ui="{ leadingIcon: 'text-dimmed' }"
+    >
       {{ triggerLabel }}
     </UButton>
 
@@ -95,7 +102,7 @@ const isOpen = ref(false)
 const draft = shallowRef<DateRange>({ start: undefined, end: undefined })
 
 watch(
-  [startDate, endDate],
+  [startDate, endDate, isOpen],
   ([start, end]) => {
     draft.value = { start: start ?? undefined, end: end ?? undefined }
   },
@@ -141,6 +148,8 @@ function apply() {
 
 function reset() {
   draft.value = { start: undefined, end: undefined }
+  startDate.value = null
+  endDate.value = null
 }
 
 const triggerLabel = computed(() => {

@@ -11,7 +11,7 @@ const items: Item[] = [
 </script>
 
 <template>
-  <USelectMenu v-model="modelValue" :items value-key="value" icon="i-lucide-funnel" class="min-w-48" />
+  <USelectMenu v-model="modelValue" :items value-key="value" icon="i-ph:funnel" class="min-w-48" />
 </template>
 
 <script setup lang="ts">
