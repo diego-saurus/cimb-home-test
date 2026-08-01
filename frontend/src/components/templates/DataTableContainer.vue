@@ -8,6 +8,8 @@ import type { Page } from '@/types/page'
 
 import TableToolbar from '@/components/organisms/TableToolbar.vue'
 
+import type { EmptyStateProps } from '../atoms/EmptyState.vue'
+
 interface Props<T> {
   tableState: TableState
   columns: TableColumn<T>[]
@@ -16,6 +18,8 @@ interface Props<T> {
 
   data?: Page<T>
   isLoading?: boolean
+
+  emptyState?: Partial<EmptyStateProps>
 }
 </script>
 
@@ -51,21 +55,17 @@ interface Props<T> {
           }"
         >
           <template #empty>
-            <EmptyState
-              title="No matching recordings"
-              description="Try adjusting your search or clearing filters."
-              icon="i-lucide-phone-off"
-            />
+            <EmptyState v-bind="emptyState" />
           </template>
         </UTable>
 
         <div class="flex items-center flex-col sm:flex-row justify-between gap-4 px-4 py-3.5 border-t border-muted">
           <div class="flex-1 text-sm">
-            Showing <span class="text-secondary font-medium"> {{ rangeStart }}-{{ rangeEnd }} </span> of
+            Menampilkan <span class="text-secondary font-medium"> {{ rangeStart }}-{{ rangeEnd }} </span> dari
             <span class="text-secondary font-medium">
               {{ data?.totalElements ?? 0 }}
             </span>
-            entries
+            data
           </div>
 
           <UPagination

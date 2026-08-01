@@ -10,16 +10,20 @@ import { useCallMonitoringFilterContext } from '@/providers/callMonitoringFilter
 
 <template>
   <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-    <DateRangeInput v-model:start-date="startDate" v-model:end-date="endDate" />
+    <DateRangeInput
+      trigger-placeholder="Pilih rentang tanggal"
+      v-model:start-date="startDate"
+      v-model:end-date="endDate"
+    />
     <SentimentFilter v-model="sentiment" />
 
     <UButton
       v-if="lg || !disabled"
       size="lg"
-      :label="lg ? undefined : 'Reset Filter'"
       class="justify-center"
       variant="soft"
       icon="i-ph:arrow-counter-clockwise"
+      :label="lg ? undefined : 'Reset Filter'"
       :color="disabled ? 'neutral' : 'error'"
       :disabled
       @click="resetFilter"

@@ -13,11 +13,11 @@ type Props = { triggerPlaceholder?: string }
 const MAX_MONTHS_LOOKBACK = 3
 
 const presets = [
-  { label: 'Last 7 days', days: 7 },
-  { label: 'Last 14 days', days: 14 },
-  { label: 'Last 1 month', months: 1 },
-  { label: 'Last 2 month', months: 2 },
-  { label: 'Last 3 months', months: MAX_MONTHS_LOOKBACK },
+  { label: '7 Hari terakhir', days: 7 },
+  { label: '14 Hari terakhir', days: 14 },
+  { label: '1 Bulan terakhir', months: 1 },
+  { label: '2 Bulan terakhir', months: 2 },
+  { label: '3 Bulan terakhir', months: MAX_MONTHS_LOOKBACK },
 ]
 </script>
 
@@ -67,9 +67,9 @@ const presets = [
 
         <div class="flex items-center justify-end gap-2 border-t border-default p-2">
           <UButton color="neutral" variant="ghost" :disabled="!draft.start && !draft.end" @click="reset">
-            Reset
+            Atur Ulang
           </UButton>
-          <UButton color="secondary" :disabled="!canApply" @click="apply"> Apply </UButton>
+          <UButton color="secondary" :disabled="!canApply" @click="apply"> Terapkan </UButton>
         </div>
       </div>
     </template>
@@ -77,7 +77,7 @@ const presets = [
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   triggerPlaceholder: 'Select date range',
 })
 
@@ -154,7 +154,7 @@ function reset() {
 
 const triggerLabel = computed(() => {
   const { start, end } = draft.value
-  if (!start && !end) return 'Select date range'
+  if (!start && !end) return props.triggerPlaceholder
   if (start && !end) return dateMedium.format(start.toDate(tz))
   if (!start && end) return dateMedium.format(end.toDate(tz))
   return `${dateMedium.format((start as CalendarDate).toDate(tz))} - ${dateMedium.format((end as CalendarDate).toDate(tz))}`

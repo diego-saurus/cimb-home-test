@@ -2,7 +2,7 @@
   <UInput
     v-model="modelValue"
     icon="i-lucide-search"
-    class="w-full sm:max-w-sm group"
+    class="w-full sm:max-w-md group"
     size="lg"
     variant="none"
     :placeholder

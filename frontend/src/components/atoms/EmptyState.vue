@@ -9,15 +9,15 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+export interface EmptyStateProps {
   title?: string
   description?: string
   icon?: string
 }
 
-withDefaults(defineProps<Props>(), {
-  title: 'No matching records',
-  description: 'Try adjusting your search or filters.',
-  icon: 'i-lucide-search-x',
+withDefaults(defineProps<EmptyStateProps>(), {
+  title: 'Tidak ada data yang cocok',
+  description: 'Coba sesuaikan pencarian anda atau hapus filter.',
+  icon: 'i-ph:phone-x',
 })
 </script>

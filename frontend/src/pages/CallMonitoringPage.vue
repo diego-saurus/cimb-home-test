@@ -22,7 +22,7 @@ import { unwrap } from '@/lib/utils'
   <UMain>
     <DataTableContainer
       title="Call Monitoring"
-      description="View and process customer call monitoring data to identify calls that require attention."
+      description="Melihat dan memproses data panggilan pelanggan untuk mengidentifikasi panggilan yang memerlukan perhatian."
       :data
       :columns
       :table-state
@@ -95,8 +95,8 @@ const columns = computed<TableColumn<CallRecord>[]>(() => [
   {
     accessorKey: 'sentimentScore',
     header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Sentiment Score Nasabah' }),
-    cell: ({ row }) => {
-      const score = row.getValue('sentimentScore') as number
+    cell: ({ getValue }) => {
+      const score = getValue<number>()
       const color = score < 70 ? 'error' : score < 85 ? 'warning' : 'success'
       return h(UBadge, { color, variant: 'subtle', label: percentage(score / 100) })
     },

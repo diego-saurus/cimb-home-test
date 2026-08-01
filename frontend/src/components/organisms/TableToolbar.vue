@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between">
-    <SearchInput v-model="search" />
+    <SearchInput v-model="search" placeholder="Cari..." />
 
     <slot />
   </div>
