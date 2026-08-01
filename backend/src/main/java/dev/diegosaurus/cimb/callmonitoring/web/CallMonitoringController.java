@@ -40,9 +40,9 @@ public class CallMonitoringController {
     public ResponseEntity<CallMonitoringSearchResponse> search(
             @RequestParam(required = false) @Size(max = 128) String search,
             @RequestParam(required = false)
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false)
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) String sentiment,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "0") int size,
@@ -59,8 +59,16 @@ public class CallMonitoringController {
 
         SentimentBucket bucket = SentimentBucket.parse(sentiment);
 
-        CallMonitoringSearchRequest req = new CallMonitoringSearchRequest(
-                search, startDate, endDate, bucket, page, effectiveSize, normalizedSortBy, direction);
+        CallMonitoringSearchRequest req = CallMonitoringSearchRequest.builder()
+                .search(search)
+                .startDate(startDate)
+                .endDate(endDate)
+                .sentimentBucket(bucket)
+                .page(page)
+                .size(effectiveSize)
+                .sortBy(normalizedSortBy)
+                .direction(direction)
+                .build();
 
         return ResponseEntity.ok(service.search(req));
     }

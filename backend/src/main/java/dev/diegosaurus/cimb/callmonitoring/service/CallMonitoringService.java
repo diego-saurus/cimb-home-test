@@ -31,16 +31,16 @@ public class CallMonitoringService {
     public CallMonitoringSearchResponse search(CallMonitoringSearchRequest req) {
         validateDateRange(req);
 
-        int page = Math.max(req.page(), 0);
-        int size = req.size() <= 0 ? DEFAULT_PAGE_SIZE : req.size();
-        Sort.Direction dir = Sort.Direction.fromOptionalString(req.direction())
+        int page = Math.max(req.getPage(), 0);
+        int size = req.getSize() <= 0 ? DEFAULT_PAGE_SIZE : req.getSize();
+        Sort.Direction dir = Sort.Direction.fromOptionalString(req.getDirection())
                 .orElse(Sort.Direction.ASC);
-        String sortBy = req.sortBy() == null || req.sortBy().isBlank()
-                ? "callTimestamp" : req.sortBy();
+        String sortBy = req.getSortBy() == null || req.getSortBy().isBlank()
+                ? "callTimestamp" : req.getSortBy();
 
         log.info("Searching call monitoring: search='{}', start={}, end={}, bucket={}, page={}, size={}, sortBy={}, dir={}",
-                req.search(), req.startDate(), req.endDate(),
-                req.sentimentBucket(), page, size, sortBy, dir);
+                req.getSearch(), req.getStartDate(), req.getEndDate(),
+                req.getSentimentBucket(), page, size, sortBy, dir);
 
         Specification<CallMonitoring> spec = CallMonitoringSpecifications.from(req);
         Page<CallMonitoring> result = repository.findAll(spec,
@@ -60,9 +60,9 @@ public class CallMonitoringService {
     }
 
     private void validateDateRange(CallMonitoringSearchRequest req) {
-        if (req.startDate() != null && req.endDate() != null
-                && req.startDate().isAfter(req.endDate())) {
-            throw new InvalidDateRangeException(req.startDate(), req.endDate());
+        if (req.getStartDate() != null && req.getEndDate() != null
+                && req.getStartDate().isAfter(req.getEndDate())) {
+            throw new InvalidDateRangeException(req.getStartDate(), req.getEndDate());
         }
     }
 

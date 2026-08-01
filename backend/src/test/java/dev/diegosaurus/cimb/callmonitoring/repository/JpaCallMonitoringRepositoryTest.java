@@ -51,7 +51,7 @@ class JpaCallMonitoringRepositoryTest {
 
         var page = repo.findAll(
                 CallMonitoringSpecifications.from(
-                        CallMonitoringSearchRequest.builderWithDefaults()
+                        CallMonitoringSearchRequest.builder()
                                 .sentimentBucket(SentimentBucket.BELOW_70).build()),
                 PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "callId")));
 
@@ -64,7 +64,7 @@ class JpaCallMonitoringRepositoryTest {
         seed("X2", LocalDate.of(2025, 5, 15), 80);
         seed("X3", LocalDate.of(2025, 6, 1), 80);
 
-        var req = CallMonitoringSearchRequest.builderWithDefaults()
+        var req = CallMonitoringSearchRequest.builder()
                 .startDate(LocalDate.of(2025, 5, 1))
                 .endDate(LocalDate.of(2025, 5, 31))
                 .build();

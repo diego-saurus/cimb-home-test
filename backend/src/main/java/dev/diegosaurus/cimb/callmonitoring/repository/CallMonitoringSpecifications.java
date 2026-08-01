@@ -19,31 +19,30 @@ public final class CallMonitoringSpecifications {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (req.search() != null && !req.search().isBlank()) {
-                String pattern = "%" + req.search().toLowerCase() + "%";
+            if (req.getSearch() != null && !req.getSearch().isBlank()) {
+                String pattern = "%" + req.getSearch().toLowerCase() + "%";
                 predicates.add(cb.or(
                         cb.like(cb.lower(root.get("callId")), pattern),
                         cb.like(cb.lower(root.get("csAgent").get("csName")), pattern),
                         cb.like(cb.lower(root.get("customer").get("customerName")), pattern),
-                        cb.like(cb.lower(root.get("callTimestamp").as(String.class)), pattern),
                         cb.like(cb.lower(root.get("sentimentScore").as(String.class)), pattern)
                 ));
             }
 
-            if (req.startDate() != null) {
+            if (req.getStartDate() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(
                         root.get("callTimestamp"),
-                        req.startDate().atStartOfDay()));
+                        req.getStartDate().atStartOfDay()));
             }
 
-            if (req.endDate() != null) {
+            if (req.getEndDate() != null) {
                 predicates.add(cb.lessThanOrEqualTo(
                         root.get("callTimestamp"),
-                        req.endDate().atTime(LocalTime.MAX)));
+                        req.getEndDate().atTime(LocalTime.MAX)));
             }
 
-            if (req.sentimentBucket() != null) {
-                switch (req.sentimentBucket()) {
+            if (req.getSentimentBucket() != null) {
+                switch (req.getSentimentBucket()) {
                     case BELOW_70 -> predicates.add(
                             cb.lessThan(root.get("sentimentScore"), PASS_THRESHOLD));
                     case AT_OR_ABOVE_70 -> predicates.add(

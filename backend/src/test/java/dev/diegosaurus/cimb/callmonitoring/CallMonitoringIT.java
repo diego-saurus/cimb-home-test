@@ -5,12 +5,12 @@ import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchRequest;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchResponse;
 import dev.diegosaurus.cimb.callmonitoring.exception.InvalidDateRangeException;
 import dev.diegosaurus.cimb.callmonitoring.service.CallMonitoringService;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,8 +30,8 @@ class CallMonitoringIT {
     @Test
     void returnsPagedResultsAgainstPostgres() {
         CallMonitoringSearchResponse response = service.search(
-                new CallMonitoringSearchRequest(null, null, null, null, 0, 5,
-                        "callTimestamp", "asc"));
+                CallMonitoringSearchRequest.builder()
+                        .page(0).size(5).sortBy("callTimestamp").direction("asc").build());
 
         assertThat(response.items()).hasSize(5);
         assertThat(response.totalElements()).isGreaterThanOrEqualTo(10);
@@ -40,21 +40,21 @@ class CallMonitoringIT {
     @Test
     void filtersByBelow70AgainstPostgres() {
         CallMonitoringSearchResponse response = service.search(
-                new CallMonitoringSearchRequest(null, null, null,
-                        SentimentBucket.BELOW_70, 0, 5,
-                        "callTimestamp", "asc"));
+                CallMonitoringSearchRequest.builder()
+                        .sentimentBucket(SentimentBucket.BELOW_70)
+                        .page(0).size(5).sortBy("callTimestamp").direction("asc").build());
 
         assertThat(response.items()).allSatisfy(item ->
-                assertThat(item.sentimentScore()).isLessThan(new java.math.BigDecimal("70")));
+                assertThat(item.sentimentScore()).isLessThan(new BigDecimal("70")));
     }
 
     @Test
     void filtersByDateRangeAgainstPostgres() {
         CallMonitoringSearchResponse response = service.search(
-                new CallMonitoringSearchRequest(null,
-                        LocalDate.of(2025, 5, 1),
-                        LocalDate.of(2025, 5, 31),
-                        null, 0, 5, "callTimestamp", "asc"));
+                CallMonitoringSearchRequest.builder()
+                        .startDate(LocalDate.of(2025, 5, 1))
+                        .endDate(LocalDate.of(2025, 5, 31))
+                        .page(0).size(5).sortBy("callTimestamp").direction("asc").build());
 
         assertThat(response.items()).allSatisfy(item ->
                 assertThat(item.callTimestamp().toLocalDate())
@@ -64,10 +64,10 @@ class CallMonitoringIT {
     @Test
     void rejectsInvertedDateRange() {
         assertThatThrownBy(() -> service.search(
-                new CallMonitoringSearchRequest(null,
-                        LocalDate.of(2025, 5, 10),
-                        LocalDate.of(2025, 5, 1),
-                        null, 0, 5, "callTimestamp", "asc")))
+                CallMonitoringSearchRequest.builder()
+                        .startDate(LocalDate.of(2025, 5, 10))
+                        .endDate(LocalDate.of(2025, 5, 1))
+                        .page(0).size(5).sortBy("callTimestamp").direction("asc").build()))
                 .isInstanceOf(InvalidDateRangeException.class);
     }
 }

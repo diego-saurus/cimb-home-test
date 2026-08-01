@@ -19,5 +19,6 @@ public record CallMonitoringSearchResponse(
             String csAgentName,
             String customerName,
             BigDecimal sentimentScore
-    ) { }
+    ) {
+    }
 }

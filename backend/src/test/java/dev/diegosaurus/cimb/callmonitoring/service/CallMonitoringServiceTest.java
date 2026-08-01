@@ -42,10 +42,10 @@ class CallMonitoringServiceTest {
         seed("B", LocalDate.of(2025, 1, 2), "a", "b", 80);
         seed("C", LocalDate.of(2025, 1, 3), "a", "b", 80);
 
-        CallMonitoringSearchRequest asc = new CallMonitoringSearchRequest(
-                null, null, null, null, 0, 5, "callId", "asc");
-        CallMonitoringSearchRequest desc = new CallMonitoringSearchRequest(
-                null, null, null, null, 0, 5, "callId", "desc");
+        CallMonitoringSearchRequest asc = CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("callId").direction("asc").build();
+        CallMonitoringSearchRequest desc = CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("callId").direction("desc").build();
 
         assertThat(service.search(asc).items()).extracting("callId").containsExactly("A", "B", "C");
         assertThat(service.search(desc).items()).extracting("callId").containsExactly("C", "B", "A");
@@ -61,11 +61,11 @@ class CallMonitoringServiceTest {
 
     @Test
     void rejectsStartAfterEndWithInvalidRangeException() {
-        CallMonitoringSearchRequest req = new CallMonitoringSearchRequest(
-                null,
-                LocalDate.of(2025, 5, 10),
-                LocalDate.of(2025, 5, 1),
-                null, 0, 5, "callTimestamp", "asc");
+        CallMonitoringSearchRequest req = CallMonitoringSearchRequest.builder()
+                .startDate(LocalDate.of(2025, 5, 10))
+                .endDate(LocalDate.of(2025, 5, 1))
+                .page(0).size(5).sortBy("callTimestamp").direction("asc")
+                .build();
 
         assertThatThrownBy(() -> service.search(req))
                 .isInstanceOf(InvalidDateRangeException.class);
@@ -79,10 +79,12 @@ class CallMonitoringServiceTest {
     }
 
     private static CallMonitoringSearchRequest defaultRequest() {
-        return new CallMonitoringSearchRequest(null, null, null, null, 0, 5, "callTimestamp", "asc");
+        return CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("callTimestamp").direction("asc").build();
     }
 
     private static CallMonitoringSearchRequest pageRequest(int page) {
-        return new CallMonitoringSearchRequest(null, null, null, null, page, 5, "callTimestamp", "asc");
+        return CallMonitoringSearchRequest.builder()
+                .page(page).size(5).sortBy("callTimestamp").direction("asc").build();
     }
 }
