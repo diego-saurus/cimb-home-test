@@ -1,26 +1,26 @@
-<script setup lang="ts">
-interface Props {
-  placeholder?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'Search...',
-})
-
-const input = defineModel<string>()
-</script>
-
 <template>
-  <UInput v-model="input" icon="i-lucide-search" class="w-full sm:max-w-sm" :placeholder>
-    <template v-if="input" #trailing>
+  <UInput v-model="modelValue" icon="i-lucide-search" class="w-full sm:max-w-sm" :placeholder>
+    <template v-if="modelValue" #trailing>
       <UButton
         color="neutral"
         variant="ghost"
         icon="i-lucide-x"
         size="xs"
         aria-label="Clear search"
-        @click="input = ''"
+        @click="modelValue = ''"
       />
     </template>
   </UInput>
 </template>
+
+<script setup lang="ts">
+interface Props {
+  placeholder?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  placeholder: 'Search...',
+})
+
+const modelValue = defineModel<string>()
+</script>

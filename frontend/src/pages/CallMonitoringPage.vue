@@ -1,25 +1,77 @@
-<script setup lang="ts">
-import MonitoringFilters from '@/components/organisms/MonitoringFilters.vue'
-import MonitoringTable from '@/components/organisms/MonitoringTable.vue'
+<script lang="ts">
+import type { TableColumn } from '@nuxt/ui'
+
+import { useQuery } from '@pinia/colada'
+import { computed, h, resolveComponent, toValue } from 'vue'
+
+import type { CallRecord } from '@/types/call'
+import type { Page } from '@/types/page'
+
+import TableSortableHeader from '@/components/atoms/TableSortableHeader.vue'
+import DataTableContainer from '@/components/templates/DataTableContainer.vue'
+import { useTableState } from '@/composables/useTableState'
+import { percentage } from '@/lib/formatter/number'
+import { satellite } from '@/lib/satellite'
+import { unwrap } from '@/lib/utils'
 </script>
 
 <template>
   <UMain>
-    <UContainer class="py-8">
-      <header class="mb-6">
-        <h1 class="text-2xl font-semibold text-highlighted">Call Monitoring</h1>
-        <p class="mt-1 text-sm text-muted">
-          View and process customer call monitoring data to identify calls that require attention.
-        </p>
-      </header>
-
-      <section class="mb-4">
-        <MonitoringFilters />
-      </section>
-
-      <section class="relative">
-        <MonitoringTable />
-      </section>
-    </UContainer>
+    <DataTableContainer :data :columns :isLoading="isPlaceholderData || isPending" :table-state />
   </UMain>
 </template>
+
+<script setup lang="ts">
+const UBadge = resolveComponent('UBadge')
+
+const tableState = useTableState()
+const { search, sortBy, sortDirection, pageIndex } = tableState
+
+const params = () => ({
+  search: toValue(search),
+  sortBy: toValue(sortBy),
+  direction: toValue(sortDirection),
+  page: toValue(pageIndex),
+})
+
+const { data, isPlaceholderData, isPending } = useQuery({
+  key: () => ['call-monitorings', params()],
+  query: ({ signal }) => satellite.get<Page<CallRecord>>('/call-monitoring', { signal, params: params() }).then(unwrap),
+  placeholderData: (prev) => prev,
+})
+
+const columns = computed<TableColumn<CallRecord>[]>(() => [
+  {
+    id: 'rowNumber',
+    header: 'No.',
+    enableSorting: false,
+    cell: ({ row }) => pageIndex.value * (data?.value?.size ?? 5) + row.index + 1,
+  },
+  {
+    accessorKey: 'callId',
+    header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Call ID' }),
+    meta: { class: { td: 'font-mono text-xs' } },
+  },
+  {
+    accessorKey: 'callTimestamp',
+    header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Call Timestamp' }),
+  },
+  {
+    accessorKey: 'csAgentName',
+    header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'CS Name' }),
+  },
+  {
+    accessorKey: 'customerName',
+    header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Nama Nasabah' }),
+  },
+  {
+    accessorKey: 'sentimentScore',
+    header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Sentiment Score Nasabah' }),
+    cell: ({ row }) => {
+      const score = row.getValue('sentimentScore') as number
+      const color = score < 70 ? 'error' : score < 85 ? 'warning' : 'success'
+      return h(UBadge, { color, variant: 'subtle', label: percentage(score / 100) })
+    },
+  },
+])
+</script>

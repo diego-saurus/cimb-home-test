@@ -1,10 +1,10 @@
-export type SentimentFilter = 'all' | 'below_70' | 'above_70'
+export type SentimentFilter = 'all' | 'BELOW_70' | 'AT_OR_ABOVE_70'
 
 export interface CallRecord {
-  id: string
   callId: string
   callTimestamp: string
-  csName: string
+  csAgentName: string
   customerName: string
+  id: number
   sentimentScore: number
 }
