@@ -53,21 +53,21 @@ class CallMonitoringIT {
     void filtersByDateRangeAgainstPostgres() {
         Page<CallMonitoringSearchResponse> response = service.search(
                 CallMonitoringSearchRequest.builder()
-                        .startDate(LocalDate.of(2025, 5, 1))
-                        .endDate(LocalDate.of(2025, 5, 31))
+                        .startDate(LocalDate.of(2026, 5, 1))
+                        .endDate(LocalDate.of(2026, 5, 31))
                         .page(0).size(5).sortBy("callTimestamp").direction("asc").build());
 
         assertThat(response.getContent()).allSatisfy(item ->
                 assertThat(item.getCallTimestamp().toLocalDate())
-                        .isBetween(LocalDate.of(2025, 5, 1), LocalDate.of(2025, 5, 31)));
+                        .isBetween(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31)));
     }
 
     @Test
     void rejectsInvertedDateRange() {
         assertThatThrownBy(() -> service.search(
                 CallMonitoringSearchRequest.builder()
-                        .startDate(LocalDate.of(2025, 5, 10))
-                        .endDate(LocalDate.of(2025, 5, 1))
+                        .startDate(LocalDate.of(2026, 5, 10))
+                        .endDate(LocalDate.of(2026, 5, 1))
                         .page(0).size(5).sortBy("callTimestamp").direction("asc").build()))
                 .isInstanceOf(InvalidDateRangeException.class);
     }
