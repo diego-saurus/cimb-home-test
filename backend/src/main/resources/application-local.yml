@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://192.168.18.228:8124/cimb}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:Kra1KozHO65imF0UcWAjN95jU14AiRHbzjxfcWvAYjlcS8zr8SihVxhFaUdd6mca}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+logging:
+  level:
+    dev.diegosaurus.cimb.callmonitoring: DEBUG
