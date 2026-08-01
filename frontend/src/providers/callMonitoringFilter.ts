@@ -9,7 +9,7 @@ export interface CallMonitoringFilterContext {
 
 export const CallMonitoringFilterKey: InjectionKey<CallMonitoringFilterContext> = Symbol()
 
-export function useCallMonitoringFilter(): CallMonitoringFilterContext {
+export function useCallMonitoringFilterContext(): CallMonitoringFilterContext {
   const context = inject(CallMonitoringFilterKey)
 
   if (!context) throw new Error('CallMonitoringFilter not provided')

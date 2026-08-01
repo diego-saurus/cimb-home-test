@@ -2,7 +2,7 @@
 import type { TableColumn } from '@nuxt/ui'
 
 import { useQuery } from '@pinia/colada'
-import { computed, h, resolveComponent, toValue } from 'vue'
+import { computed, h, resolveComponent, toValue, watch } from 'vue'
 
 import type { CallRecord } from '@/types/call'
 import type { Page } from '@/types/page'
@@ -10,6 +10,7 @@ import type { Page } from '@/types/page'
 import TableSortableHeader from '@/components/atoms/TableSortableHeader.vue'
 import CallMonitoringFilter from '@/components/organisms/CallMonitoringFilter.vue'
 import DataTableContainer from '@/components/templates/DataTableContainer.vue'
+import { useCallMonitoringFilter } from '@/composables/useCallMonitoringFilter'
 import { useTableState } from '@/composables/useTableState'
 import { dateLong } from '@/lib/formatter/date'
 import { percentage } from '@/lib/formatter/number'
@@ -31,7 +32,8 @@ import { unwrap } from '@/lib/utils'
 const UBadge = resolveComponent('UBadge')
 
 const tableState = useTableState()
-const { search, sortBy, sortDirection, pageIndex, startDate, endDate } = tableState
+const { startDate, endDate } = useCallMonitoringFilter()
+const { search, sortBy, sortDirection, pageIndex, page } = tableState
 
 const params = () => ({
   search: toValue(search),
@@ -40,6 +42,10 @@ const params = () => ({
   page: toValue(pageIndex),
   startDate: toValue(startDate),
   endDate: toValue(endDate),
+})
+
+watch([startDate, endDate], () => {
+  page.value = 1
 })
 
 const { data, isPlaceholderData, isPending } = useQuery({
