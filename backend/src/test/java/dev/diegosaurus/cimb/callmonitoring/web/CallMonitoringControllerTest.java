@@ -2,20 +2,22 @@ package dev.diegosaurus.cimb.callmonitoring.web;
 
 import dev.diegosaurus.cimb.callmonitoring.config.CallMonitoringProperties;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchResponse;
-import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchResponse.Item;
 import dev.diegosaurus.cimb.callmonitoring.exception.GlobalExceptionHandler;
 import dev.diegosaurus.cimb.callmonitoring.exception.InvalidDateRangeException;
 import dev.diegosaurus.cimb.callmonitoring.service.CallMonitoringService;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -34,19 +36,29 @@ class CallMonitoringControllerTest {
 
     @Test
     void returns200WithPagedPayload() throws Exception {
-        when(service.search(any())).thenReturn(new CallMonitoringSearchResponse(
-                List.of(new Item(1L, "C-1", LocalDate.of(2025, 5, 1).atStartOfDay(),
-                        "Ahmad", "Budi", java.math.BigDecimal.valueOf(80))),
-                1L, 1, 0, 5, null));
+        CallMonitoringSearchResponse item = CallMonitoringSearchResponse.builder()
+                .id(1L)
+                .callId("C-1")
+                .callTimestamp(LocalDateTime.of(2025, 5, 1, 0, 0))
+                .csAgentName("Ahmad")
+                .customerName("Budi")
+                .sentimentScore(BigDecimal.valueOf(80))
+                .build();
+        Page<CallMonitoringSearchResponse> page = new PageImpl<>(
+                List.of(item),
+                org.springframework.data.domain.PageRequest.of(0, 5),
+                1);
+
+        when(service.search(any())).thenReturn(page);
 
         mockMvc.perform(get("/api/call-monitoring")
                         .param("sortBy", "callTimestamp")
                         .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items[0].callId").value("C-1"))
-                .andExpect(jsonPath("$.items[0].csAgentName").value("Ahmad"))
-                .andExpect(jsonPath("$.items[0].customerName").value("Budi"))
-                .andExpect(jsonPath("$.items[0].sentimentScore").value(80))
+                .andExpect(jsonPath("$.content[0].callId").value("C-1"))
+                .andExpect(jsonPath("$.content[0].csAgentName").value("Ahmad"))
+                .andExpect(jsonPath("$.content[0].customerName").value("Budi"))
+                .andExpect(jsonPath("$.content[0].sentimentScore").value(80))
                 .andExpect(jsonPath("$.totalElements").value(1));
     }
 

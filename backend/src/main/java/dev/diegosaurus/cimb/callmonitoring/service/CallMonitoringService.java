@@ -28,7 +28,7 @@ public class CallMonitoringService {
     }
 
     @Transactional(readOnly = true)
-    public CallMonitoringSearchResponse search(CallMonitoringSearchRequest req) {
+    public Page<CallMonitoringSearchResponse> search(CallMonitoringSearchRequest req) {
         validateDateRange(req);
 
         int page = Math.max(req.getPage(), 0);
@@ -43,20 +43,8 @@ public class CallMonitoringService {
                 req.getSentimentBucket(), page, size, sortBy, dir);
 
         Specification<CallMonitoring> spec = CallMonitoringSpecifications.from(req);
-        Page<CallMonitoring> result = repository.findAll(spec,
-                PageRequest.of(page, size, Sort.by(dir, sortBy)));
-
-        var items = result.getContent().stream()
-                .map(this::toItem)
-                .toList();
-
-        String empty = result.isEmpty()
-                ? "No call monitoring records match the active filters."
-                : null;
-
-        return new CallMonitoringSearchResponse(
-                items, result.getTotalElements(), result.getTotalPages(),
-                page, size, empty);
+        return repository.findAll(spec, PageRequest.of(page, size, Sort.by(dir, sortBy)))
+                .map(this::toItem);
     }
 
     private void validateDateRange(CallMonitoringSearchRequest req) {
@@ -66,13 +54,14 @@ public class CallMonitoringService {
         }
     }
 
-    private CallMonitoringSearchResponse.Item toItem(CallMonitoring cm) {
-        return new CallMonitoringSearchResponse.Item(
-                cm.getId(),
-                cm.getCallId(),
-                cm.getCallTimestamp(),
-                cm.getCsAgent().getCsName(),
-                cm.getCustomer().getCustomerName(),
-                cm.getSentimentScore());
+    private CallMonitoringSearchResponse toItem(CallMonitoring cm) {
+        return CallMonitoringSearchResponse.builder()
+                .id(cm.getId())
+                .callId(cm.getCallId())
+                .callTimestamp(cm.getCallTimestamp())
+                .csAgentName(cm.getCsAgent().getCsName())
+                .customerName(cm.getCustomer().getCustomerName())
+                .sentimentScore(cm.getSentimentScore())
+                .build();
     }
 }

@@ -7,11 +7,10 @@ import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchRequest;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchResponse;
 import dev.diegosaurus.cimb.callmonitoring.exception.InvalidDateRangeException;
 import dev.diegosaurus.cimb.callmonitoring.repository.InMemoryCallMonitoringRepository;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,15 +36,15 @@ class CallMonitoringServiceTest {
             seed("C" + (1000 + i), LocalDate.now().minusDays(i), "cs" + i, "cust" + i, 50 + i);
         }
 
-        CallMonitoringSearchResponse page0 = service.search(defaultRequest());
-        CallMonitoringSearchResponse page1 = service.search(pageRequest(1));
-        CallMonitoringSearchResponse page2 = service.search(pageRequest(2));
+        Page<CallMonitoringSearchResponse> page0 = service.search(defaultRequest());
+        Page<CallMonitoringSearchResponse> page1 = service.search(pageRequest(1));
+        Page<CallMonitoringSearchResponse> page2 = service.search(pageRequest(2));
 
-        assertThat(page0.items()).hasSize(5);
-        assertThat(page1.items()).hasSize(5);
-        assertThat(page2.items()).hasSize(2);
-        assertThat(page0.totalElements()).isEqualTo(12);
-        assertThat(page0.totalPages()).isEqualTo(3);
+        assertThat(page0.getContent()).hasSize(5);
+        assertThat(page1.getContent()).hasSize(5);
+        assertThat(page2.getContent()).hasSize(2);
+        assertThat(page0.getTotalElements()).isEqualTo(12);
+        assertThat(page0.getTotalPages()).isEqualTo(3);
     }
 
     @Test
@@ -59,16 +58,15 @@ class CallMonitoringServiceTest {
         CallMonitoringSearchRequest desc = CallMonitoringSearchRequest.builder()
                 .page(0).size(5).sortBy("callId").direction("desc").build();
 
-        assertThat(service.search(asc).items()).extracting("callId").containsExactly("A", "B", "C");
-        assertThat(service.search(desc).items()).extracting("callId").containsExactly("C", "B", "A");
+        assertThat(service.search(asc).getContent()).extracting("callId").containsExactly("A", "B", "C");
+        assertThat(service.search(desc).getContent()).extracting("callId").containsExactly("C", "B", "A");
     }
 
     @Test
     void returnsEmptyPageWhenNoRecords() {
-        CallMonitoringSearchResponse response = service.search(defaultRequest());
-        assertThat(response.items()).isEmpty();
-        assertThat(response.totalElements()).isZero();
-        assertThat(response.emptyStateMessage()).isNotBlank();
+        Page<CallMonitoringSearchResponse> response = service.search(defaultRequest());
+        assertThat(response.getContent()).isEmpty();
+        assertThat(response.getTotalElements()).isZero();
     }
 
     @Test

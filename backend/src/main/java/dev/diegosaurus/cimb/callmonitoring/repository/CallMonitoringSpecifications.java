@@ -3,12 +3,10 @@ package dev.diegosaurus.cimb.callmonitoring.repository;
 import dev.diegosaurus.cimb.callmonitoring.domain.CallMonitoring;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchRequest;
 import jakarta.persistence.criteria.Predicate;
-
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.data.jpa.domain.Specification;
 
 public final class CallMonitoringSpecifications {
@@ -27,8 +25,7 @@ public final class CallMonitoringSpecifications {
                 predicates.add(cb.or(
                         cb.like(cb.lower(root.get("callId")), pattern),
                         cb.like(cb.lower(root.get("csAgent").get("csName")), pattern),
-                        cb.like(cb.lower(root.get("customer").get("customerName")), pattern),
-                        cb.like(cb.lower(root.get("sentimentScore").as(String.class)), pattern)
+                        cb.like(cb.lower(root.get("customer").get("customerName")), pattern)
                 ));
             }
 

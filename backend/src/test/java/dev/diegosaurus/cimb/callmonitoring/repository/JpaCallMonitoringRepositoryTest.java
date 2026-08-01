@@ -76,4 +76,17 @@ class JpaCallMonitoringRepositoryTest {
 
         assertThat(page.getContent()).extracting("callId").containsExactly("X1", "X2");
     }
+
+    @Test
+    void specSearchByCallId() {
+        seed("CM-AAA", LocalDate.of(2025, 5, 1), 75);
+        seed("CM-BBB", LocalDate.of(2025, 5, 2), 80);
+
+        var req = CallMonitoringSearchRequest.builder().search("CM-AAA").build();
+        var page = repo.findAll(
+                CallMonitoringSpecifications.from(req),
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "callId")));
+
+        assertThat(page.getContent()).extracting("callId").containsExactly("CM-AAA");
+    }
 }

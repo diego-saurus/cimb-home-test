@@ -8,6 +8,7 @@ import dev.diegosaurus.cimb.callmonitoring.exception.InvalidSortColumnException;
 import dev.diegosaurus.cimb.callmonitoring.service.CallMonitoringService;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +38,7 @@ public class CallMonitoringController {
     }
 
     @GetMapping
-    public ResponseEntity<CallMonitoringSearchResponse> search(
+    public ResponseEntity<Page<CallMonitoringSearchResponse>> search(
             @RequestParam(required = false) @Size(max = 128) String search,
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
