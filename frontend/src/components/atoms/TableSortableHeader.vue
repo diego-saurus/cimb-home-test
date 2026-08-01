@@ -11,7 +11,7 @@ import { useSortingContext } from '@/providers/sorting'
     :label
     :trailingIcon="isDesc ? 'i-ph:sort-ascending' : 'i-ph:sort-descending'"
     :ui="{
-      base: 'group px-1 py-1',
+      base: 'group',
       trailingIcon: ['group-hover:opacity-100  transition-opacity', isCurrentlySort ? 'opacity-100' : 'opacity-0'],
     }"
     variant="ghost"

@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 
+import { computed } from 'vue'
+
 import type { TableState } from '@/composables/useTableState'
 import type { Page } from '@/types/page'
 
@@ -50,8 +52,27 @@ interface Props<T> {
           </template>
         </UTable>
 
-        <div class="flex justify-end border-t border-default pt-4 px-4">
-          <UPagination v-model:page="page" :items-per-page="data?.size" :total="data?.totalElements" />
+        <div class="flex items-center border-t border-default py-4 px-4">
+          <div class="flex-1 text-sm">
+            Showing <span class="text-secondary font-medium"> {{ rangeStart }}-{{ rangeEnd }} </span> of
+            <span class="text-secondary font-medium">
+              {{ data?.totalElements ?? 0 }}
+            </span>
+            entries
+          </div>
+
+          <UPagination
+            v-model:page="page"
+            :items-per-page="data?.size"
+            :total="data?.totalElements"
+            :edges="true"
+            :sibling-count="1"
+            :ui="{
+              first: 'hidden',
+              last: 'hidden',
+            }"
+          >
+          </UPagination>
         </div>
       </div>
     </section>
@@ -61,4 +82,7 @@ interface Props<T> {
 <script setup lang="ts" generic="T">
 const props = defineProps<Props<T>>()
 const { pageIndex, page } = props.tableState
+
+const rangeStart = computed(() => (props.data?.pageable.offset ?? 0) + 1)
+const rangeEnd = computed(() => (props.data?.pageable.offset ?? 0) + (props.data?.numberOfElements ?? 0))
 </script>

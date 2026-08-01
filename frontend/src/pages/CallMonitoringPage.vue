@@ -33,13 +33,13 @@ const UBadge = resolveComponent('UBadge')
 
 const tableState = useTableState()
 const { startDate, endDate, sentiment } = useCallMonitoringFilter()
-const { search, sortBy, sortDirection, pageIndex, page } = tableState
+const { debouncedSearch, sortBy, sortDirection, pageIndex, page } = tableState
 
 const params = computed(() => {
   const sentimentValue = sentiment.value === 'all' ? undefined : sentiment.value
 
   return {
-    search: toValue(search),
+    search: toValue(debouncedSearch),
     sortBy: toValue(sortBy),
     direction: toValue(sortDirection),
     page: toValue(pageIndex),

@@ -3,7 +3,6 @@ import type { DateValue } from '@internationalized/date'
 
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-import { isOmittedExpression } from 'typescript'
 import { computed, ref, shallowRef, watch } from 'vue'
 
 import { dateMedium } from '@/lib/formatter/date'
@@ -27,6 +26,7 @@ const presets = [
     <UButton
       color="neutral"
       variant="outline"
+      size="lg"
       :icon="startDate ? 'i-ph:calendar-check' : 'i-ph:calendar-dots'"
       :aria-label="triggerLabel"
       :ui="{ leadingIcon: 'text-dimmed' }"
@@ -42,7 +42,7 @@ const presets = [
               v-for="range in presets"
               :key="range.label"
               :label="range.label"
-              color="neutral"
+              color="secondary"
               variant="ghost"
               class="rounded-none px-4"
               :class="[isPresetSelected(range) ? 'bg-elevated' : 'hover:bg-elevated/50']"
@@ -69,7 +69,7 @@ const presets = [
           <UButton color="neutral" variant="ghost" :disabled="!draft.start && !draft.end" @click="reset">
             Reset
           </UButton>
-          <UButton color="primary" :disabled="!canApply" @click="apply"> Apply </UButton>
+          <UButton color="secondary" :disabled="!canApply" @click="apply"> Apply </UButton>
         </div>
       </div>
     </template>

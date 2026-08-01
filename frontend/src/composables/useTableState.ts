@@ -6,7 +6,7 @@ import { useSortingState } from './useSortingState'
 
 export function useTableState() {
   const search = useRouteQuery<string>('s', '')
-  const debouncedSearch = refDebounced(search)
+  const debouncedSearch = refDebounced(search, 350)
 
   const page = useRouteQuery<number>('page', 1, { transform: Number })
   const pageIndex = computed(() => page.value - 1)

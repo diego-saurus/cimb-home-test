@@ -14,11 +14,12 @@ import { useCallMonitoringFilterContext } from '@/providers/callMonitoringFilter
     <SentimentFilter v-model="sentiment" />
 
     <UButton
+      size="lg"
+      @click="resetFilter"
       :disabled
       :color="disabled ? 'neutral' : 'error'"
       variant="soft"
       icon="i-ph:arrow-counter-clockwise"
-      @click="resetFilter"
     />
   </div>
 </template>

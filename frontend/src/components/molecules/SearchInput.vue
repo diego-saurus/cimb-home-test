@@ -1,5 +1,5 @@
 <template>
-  <UInput v-model="modelValue" icon="i-lucide-search" class="w-full sm:max-w-sm" :placeholder>
+  <UInput v-model="modelValue" icon="i-lucide-search" class="w-full sm:max-w-sm" size="lg" :placeholder>
     <template v-if="modelValue" #trailing>
       <UButton
         size="xs"
@@ -14,11 +14,9 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-  placeholder?: string
-}
+import type { InputProps } from '@nuxt/ui'
 
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<InputProps>(), {
   placeholder: 'Search...',
 })
 

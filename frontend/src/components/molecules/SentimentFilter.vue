@@ -11,7 +11,15 @@ const items: Item[] = [
 </script>
 
 <template>
-  <USelectMenu v-model="modelValue" :items value-key="value" icon="i-ph:funnel" class="min-w-48" />
+  <USelect
+    v-model="modelValue"
+    :items
+    value-key="value"
+    variant="outline"
+    size="lg"
+    icon="i-ph:funnel"
+    class="min-w-48"
+  />
 </template>
 
 <script setup lang="ts">
