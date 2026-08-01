@@ -36,7 +36,7 @@ class CallMonitoringIT {
                         .page(0).size(5).sortBy("callTimestamp").direction("asc").build());
 
         assertThat(response.items()).hasSize(5);
-        assertThat(response.totalElements()).isGreaterThanOrEqualTo(10);
+        assertThat(response.totalElements()).isGreaterThanOrEqualTo(200);
     }
 
     @Test
