@@ -7,8 +7,10 @@ import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchRequest;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchResponse;
 import dev.diegosaurus.cimb.callmonitoring.exception.InvalidDateRangeException;
 import dev.diegosaurus.cimb.callmonitoring.repository.InMemoryCallMonitoringRepository;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +20,16 @@ class CallMonitoringServiceTest {
 
     private final InMemoryCallMonitoringRepository repo = new InMemoryCallMonitoringRepository();
     private final CallMonitoringService service = new CallMonitoringService(repo);
+
+    private static CallMonitoringSearchRequest defaultRequest() {
+        return CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("callTimestamp").direction("asc").build();
+    }
+
+    private static CallMonitoringSearchRequest pageRequest(int page) {
+        return CallMonitoringSearchRequest.builder()
+                .page(page).size(5).sortBy("callTimestamp").direction("asc").build();
+    }
 
     @Test
     void returnsPagedResultsByDefaultPageSizeOfFive() {
@@ -76,15 +88,5 @@ class CallMonitoringServiceTest {
         Customer customer = Customer.builder().id(1).customerName(cust).build();
         repo.save(new CallMonitoring(callId, date.atStartOfDay(),
                 agent, customer, BigDecimal.valueOf(score)));
-    }
-
-    private static CallMonitoringSearchRequest defaultRequest() {
-        return CallMonitoringSearchRequest.builder()
-                .page(0).size(5).sortBy("callTimestamp").direction("asc").build();
-    }
-
-    private static CallMonitoringSearchRequest pageRequest(int page) {
-        return CallMonitoringSearchRequest.builder()
-                .page(page).size(5).sortBy("callTimestamp").direction("asc").build();
     }
 }

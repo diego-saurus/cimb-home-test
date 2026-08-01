@@ -3,17 +3,20 @@ package dev.diegosaurus.cimb.callmonitoring.repository;
 import dev.diegosaurus.cimb.callmonitoring.domain.CallMonitoring;
 import dev.diegosaurus.cimb.callmonitoring.dto.CallMonitoringSearchRequest;
 import jakarta.persistence.criteria.Predicate;
+
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 
 public final class CallMonitoringSpecifications {
 
     private static final BigDecimal PASS_THRESHOLD = new BigDecimal("70.00");
 
-    private CallMonitoringSpecifications() { }
+    private CallMonitoringSpecifications() {
+    }
 
     public static Specification<CallMonitoring> from(CallMonitoringSearchRequest req) {
         return (root, query, cb) -> {

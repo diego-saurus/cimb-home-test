@@ -52,7 +52,8 @@ public class CallMonitoring {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    protected CallMonitoring() { }
+    protected CallMonitoring() {
+    }
 
     public CallMonitoring(String callId, LocalDateTime callTimestamp,
                           CsAgent csAgent, Customer customer, BigDecimal sentimentScore) {
@@ -83,5 +84,7 @@ public class CallMonitoring {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(callId); }
+    public int hashCode() {
+        return Objects.hash(callId);
+    }
 }

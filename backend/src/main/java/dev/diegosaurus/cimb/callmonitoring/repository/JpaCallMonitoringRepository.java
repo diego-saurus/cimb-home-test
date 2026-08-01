@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface JpaCallMonitoringRepository
         extends JpaRepository<CallMonitoring, Long>,
-                JpaSpecificationExecutor<CallMonitoring>,
-                CallMonitoringRepository {
+        JpaSpecificationExecutor<CallMonitoring>,
+        CallMonitoringRepository {
 
     @Override
     @EntityGraph(attributePaths = {"csAgent", "customer"})

@@ -1,11 +1,13 @@
 package dev.diegosaurus.cimb.callmonitoring.repository;
 
 import dev.diegosaurus.cimb.callmonitoring.domain.CallMonitoring;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +24,10 @@ public class InMemoryCallMonitoringRepository implements CallMonitoringRepositor
         CallMonitoring persisted = new CallMonitoring(entity.getCallId(),
                 entity.getCallTimestamp(), entity.getCsAgent(), entity.getCustomer(),
                 entity.getSentimentScore()) {
-            @Override public Long getId() { return id; }
+            @Override
+            public Long getId() {
+                return id;
+            }
         };
         store.put(id, persisted);
         return persisted;

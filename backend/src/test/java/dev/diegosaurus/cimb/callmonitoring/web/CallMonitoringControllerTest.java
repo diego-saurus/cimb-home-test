@@ -27,11 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({GlobalExceptionHandler.class, CallMonitoringControllerTest.PropsConfig.class})
 class CallMonitoringControllerTest {
 
-    @EnableConfigurationProperties(CallMonitoringProperties.class)
-    static class PropsConfig { }
-
-    @Autowired private MockMvc mockMvc;
-    @MockitoBean private CallMonitoringService service;
+    @Autowired
+    private MockMvc mockMvc;
+    @MockitoBean
+    private CallMonitoringService service;
 
     @Test
     void returns200WithPagedPayload() throws Exception {
@@ -69,5 +68,9 @@ class CallMonitoringControllerTest {
                         .param("sortBy", "evilColumn"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("invalid_sort_column"));
+    }
+
+    @EnableConfigurationProperties(CallMonitoringProperties.class)
+    static class PropsConfig {
     }
 }
