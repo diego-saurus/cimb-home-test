@@ -24,7 +24,9 @@ interface Props<T> {
     </header>
 
     <section class="mb-4">
-      <TableToolbar />
+      <TableToolbar>
+        <slot name="toolbar" />
+      </TableToolbar>
     </section>
 
     <section class="relative">

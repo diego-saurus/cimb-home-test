@@ -8,8 +8,10 @@ import type { CallRecord } from '@/types/call'
 import type { Page } from '@/types/page'
 
 import TableSortableHeader from '@/components/atoms/TableSortableHeader.vue'
+import CallMonitoringFilter from '@/components/organisms/CallMonitoringFilter.vue'
 import DataTableContainer from '@/components/templates/DataTableContainer.vue'
 import { useTableState } from '@/composables/useTableState'
+import { dateLong } from '@/lib/formatter/date'
 import { percentage } from '@/lib/formatter/number'
 import { satellite } from '@/lib/satellite'
 import { unwrap } from '@/lib/utils'
@@ -17,7 +19,11 @@ import { unwrap } from '@/lib/utils'
 
 <template>
   <UMain>
-    <DataTableContainer :data :columns :isLoading="isPlaceholderData || isPending" :table-state />
+    <DataTableContainer :data :columns :table-state :isLoading="isPlaceholderData || isPending">
+      <template v-slot:toolbar>
+        <CallMonitoringFilter />
+      </template>
+    </DataTableContainer>
   </UMain>
 </template>
 
@@ -25,13 +31,15 @@ import { unwrap } from '@/lib/utils'
 const UBadge = resolveComponent('UBadge')
 
 const tableState = useTableState()
-const { search, sortBy, sortDirection, pageIndex } = tableState
+const { search, sortBy, sortDirection, pageIndex, startDate, endDate } = tableState
 
 const params = () => ({
   search: toValue(search),
   sortBy: toValue(sortBy),
   direction: toValue(sortDirection),
   page: toValue(pageIndex),
+  startDate: toValue(startDate),
+  endDate: toValue(endDate),
 })
 
 const { data, isPlaceholderData, isPending } = useQuery({
@@ -55,6 +63,7 @@ const columns = computed<TableColumn<CallRecord>[]>(() => [
   {
     accessorKey: 'callTimestamp',
     header: ({ column }) => h(TableSortableHeader<CallRecord>, { column, label: 'Call Timestamp' }),
+    cell: ({ getValue }) => dateLong.format(new Date(getValue<string>())),
   },
   {
     accessorKey: 'csAgentName',
