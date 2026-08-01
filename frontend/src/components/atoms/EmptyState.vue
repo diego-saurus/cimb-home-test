@@ -1,17 +1,3 @@
-<script setup lang="ts">
-interface Props {
-  title?: string
-  description?: string
-  icon?: string
-}
-
-withDefaults(defineProps<Props>(), {
-  title: 'No matching records',
-  description: 'Try adjusting your search or filters.',
-  icon: 'i-lucide-search-x',
-})
-</script>
-
 <template>
   <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
     <UIcon :name="icon" class="size-10 text-muted" />
@@ -21,3 +7,17 @@ withDefaults(defineProps<Props>(), {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+export interface EmptyStateProps {
+  title?: string
+  description?: string
+  icon?: string
+}
+
+withDefaults(defineProps<EmptyStateProps>(), {
+  title: 'Tidak ada data yang cocok',
+  description: 'Coba sesuaikan pencarian anda atau hapus filter.',
+  icon: 'i-ph:phone-x',
+})
+</script>

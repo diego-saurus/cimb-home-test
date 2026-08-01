@@ -35,8 +35,9 @@ public class CallMonitoringService {
         int size = req.getSize() <= 0 ? DEFAULT_PAGE_SIZE : req.getSize();
         Sort.Direction dir = Sort.Direction.fromOptionalString(req.getDirection())
                 .orElse(Sort.Direction.ASC);
-        String sortBy = req.getSortBy() == null || req.getSortBy().isBlank()
+        String rawSortBy = req.getSortBy() == null || req.getSortBy().isBlank()
                 ? "callTimestamp" : req.getSortBy();
+        String sortBy = toJpaProperty(rawSortBy);
 
         log.info("Searching call monitoring: search='{}', start={}, end={}, bucket={}, page={}, size={}, sortBy={}, dir={}",
                 req.getSearch(), req.getStartDate(), req.getEndDate(),
@@ -45,6 +46,14 @@ public class CallMonitoringService {
         Specification<CallMonitoring> spec = CallMonitoringSpecifications.from(req);
         return repository.findAll(spec, PageRequest.of(page, size, Sort.by(dir, sortBy)))
                 .map(this::toItem);
+    }
+
+    private static String toJpaProperty(String sortBy) {
+        return switch (sortBy) {
+            case "csAgentName" -> "csAgent.csName";
+            case "customerName" -> "customer.customerName";
+            default -> sortBy;
+        };
     }
 
     private void validateDateRange(CallMonitoringSearchRequest req) {

@@ -81,6 +81,32 @@ class CallMonitoringServiceTest {
                 .isInstanceOf(InvalidDateRangeException.class);
     }
 
+    @Test
+    void sortsByCustomerNameMappedFromCsAgentName() {
+        seed("A", LocalDate.of(2025, 1, 1), "cs", "Zara", 80);
+        seed("B", LocalDate.of(2025, 1, 2), "cs", "Andi", 80);
+        seed("C", LocalDate.of(2025, 1, 3), "cs", "Mira", 80);
+
+        CallMonitoringSearchRequest req = CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("customerName").direction("asc").build();
+
+        Page<CallMonitoringSearchResponse> page = service.search(req);
+        assertThat(page.getContent()).extracting("callId").containsExactly("B", "C", "A");
+    }
+
+    @Test
+    void sortsByCsAgentNameMappedFromCsAgentName() {
+        seed("A", LocalDate.of(2025, 1, 1), "Zara", "cust", 80);
+        seed("B", LocalDate.of(2025, 1, 2), "Andi", "cust", 80);
+        seed("C", LocalDate.of(2025, 1, 3), "Mira", "cust", 80);
+
+        CallMonitoringSearchRequest req = CallMonitoringSearchRequest.builder()
+                .page(0).size(5).sortBy("csAgentName").direction("asc").build();
+
+        Page<CallMonitoringSearchResponse> page = service.search(req);
+        assertThat(page.getContent()).extracting("callId").containsExactly("B", "C", "A");
+    }
+
     private void seed(String callId, LocalDate date, String cs, String cust, int score) {
         CsAgent agent = CsAgent.builder().id(1).csName(cs).build();
         Customer customer = Customer.builder().id(1).customerName(cust).build();

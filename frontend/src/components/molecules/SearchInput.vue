@@ -1,26 +1,32 @@
-<script setup lang="ts">
-interface Props {
-  placeholder?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'Search...',
-})
-
-const input = defineModel<string>()
-</script>
-
 <template>
-  <UInput v-model="input" icon="i-lucide-search" class="w-full sm:max-w-sm" :placeholder>
-    <template v-if="input" #trailing>
+  <UInput
+    v-model="modelValue"
+    icon="i-lucide-search"
+    class="w-full sm:max-w-md group"
+    size="lg"
+    variant="none"
+    :placeholder
+  >
+    <template v-if="modelValue" #trailing>
       <UButton
+        size="xs"
         color="neutral"
         variant="ghost"
         icon="i-lucide-x"
-        size="xs"
         aria-label="Clear search"
-        @click="input = ''"
+        class="opacity-0 group-hover:opacity-100 transition-opacity group-focus-within:opacity-100"
+        @click="modelValue = ''"
       />
     </template>
   </UInput>
 </template>
+
+<script setup lang="ts">
+import type { InputProps } from '@nuxt/ui'
+
+withDefaults(defineProps<InputProps>(), {
+  placeholder: 'Search...',
+})
+
+const modelValue = defineModel<string>()
+</script>
