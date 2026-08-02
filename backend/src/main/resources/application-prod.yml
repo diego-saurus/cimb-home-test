@@ -34,7 +34,6 @@ spring:
 
 cimb:
   cors:
-    # Override via the CORS_ALLOWED_ORIGINS env var in production (comma-separated).
     allowed-origins: []
 
 logging:
