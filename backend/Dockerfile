@@ -21,7 +21,7 @@ COPY --from=build --chown=app:app /workspace/app.jar /app/app.jar
 USER app:app
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1
+  CMD curl -sS -o /dev/null http://127.0.0.1:8080/ || exit 1
 
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom"
 ENV SPRING_PROFILES_ACTIVE=local

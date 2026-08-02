@@ -5,6 +5,8 @@ services:
     image: postgres:16-alpine
     container_name: cm-postgres
     restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432" # For development purposes
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-cimb}
       POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
@@ -40,7 +42,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: prod
       DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-cimb}
       DB_USERNAME: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -50,7 +52,7 @@ services:
       - backend
       - frontend
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1"]
+      test: ["CMD-SHELL", "curl -sS -o /dev/null http://127.0.0.1:8080/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -73,6 +75,9 @@ services:
     image: call-monitoring/frontend:local
     container_name: cm-frontend
     restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
     networks:
       - frontend
     ports:
@@ -98,7 +103,6 @@ services:
 networks:
   backend:
     driver: bridge
-    internal: true
   frontend:
     driver: bridge
 
