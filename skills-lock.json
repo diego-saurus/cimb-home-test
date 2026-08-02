@@ -18,6 +18,12 @@
       "sourceType": "github",
       "skillPath": "skills/nuxt-ui/SKILL.md",
       "computedHash": "ef3a731fdfa8439d3c7f0c6d497a67073216b8cb7d7fa6a3c605a6fda4ede19a"
+    },
+    "unit-test-vue-pinia": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/unit-test-vue-pinia/SKILL.md",
+      "computedHash": "ef6e0d48f9932bcfb6220f2790fb5cfc3c1e84b17e04e9ec219331489b47a66f"
     }
   }
 }

@@ -1,9 +1,13 @@
-node_modules/
-dist/
-dist-ssr/
-*.local
+node_modules
+.DS_Store
 .env
+dist
+dist-ssr
+coverage
+*.local
 
-# Nuxt UI auto-generated type declarations
-frontend/auto-imports.d.ts
-frontend/components.d.ts
+auto-imports.d.ts
+components.d.ts
+
+npm-debug.log*
+pnpm-debug.log*
