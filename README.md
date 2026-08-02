@@ -175,4 +175,28 @@ Vite menjalankan frontend di **http://localhost:5173**. Konfigurasi CORS backend
 
 ---
 
+## 5. Penggunaan AI
+
+Saya mengerjakan proyek ini dengan bantuan AI agent (OpenCode CLI dengan 9router gateway proxy). Bagian pekerjaan yang dibantu AI antara lain:
+
+- **Backend (Spring Boot 4, Java 17).** Skeleton controller, service, repository, dan konfigurasi Flyway. Setup CORS, profil `local` vs `prod`. Penulisan query dan index pada migrasi database.
+- **Docker Compose.** Dockerfile multi-stage untuk backend dan frontend, konfigurasi Nginx sebagai reverse proxy `/api/*`, dan healthcheck untuk Postgres.
+- **Unit Test Frontend dan Backend**. 
+- **Dokumentasi.** Penulisan README ini
+
+
+### Semua tools AI yang saya gunakan
+- [Graphify](https://github.com/Graphify-Labs/graphify) (Source graphify tidak saya commit)
+- Firecrawl (Private Self Hosted)
+- Memory Provider : [Hindsight Self Hosted](https://hindsight.diego.web.id/)
+- AI Gateway : [9Router](https://9router.diego.web.id)
+- Agent : OpenCode
+
+### Contoh Workflow
+- Saya akan mencari skills yang sesuai dengan project yang akan saya gunakan (contoh: [java-springboot](https://www.skills.sh/github/awesome-copilot/java-springboot))
+- Saya pasang rules di `AGENTS.md` global (bukan project). Bahwa selalu gunakan plugin hindsight yang sudah dikonfigurasi, dan gunakan graphify jika ada pertanyaan tentang codebase
+- Saya plan menggunakan skill `grill-me` untuk menghilangkan ambigu requirement dengan refer file `user-story` untuk generate code backend. 
+- Ketika plan sudah dibuat, saya review lagi dan menanyakan trade off jika ada. Dan saya minta plan untuk generate code per milestone, agar ketika saya review code tidak terlalu banyak dalam satu waktu
+- Pindah ke mode `build` lalu generate per milestone
+- Untuk code frontend, saya hanya generate unit test dengan memulai session baru dan menggunakan skill `unit-test-vue-pinia`. karena saya menggunakan memory provider, session baru ini masih ingat dengan file `user-story` dan juga codebase saya
 
