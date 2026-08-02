@@ -56,7 +56,7 @@ const params = computed(() => {
   }
 })
 
-watch([startDate, endDate], () => {
+watch([startDate, endDate, sentiment], () => {
   page.value = 1
 })
 

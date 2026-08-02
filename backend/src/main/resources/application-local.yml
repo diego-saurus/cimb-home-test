@@ -3,9 +3,9 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: ${DB_URL:jdbc:postgresql://192.168.18.228:8124/cimb}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/cimb}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:Kra1KozHO65imF0UcWAjN95jU14AiRHbzjxfcWvAYjlcS8zr8SihVxhFaUdd6mca}
+    password: ${DB_PASSWORD:change-me-to-a-strong-random-value}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
