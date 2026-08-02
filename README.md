@@ -117,18 +117,11 @@ docker compose ps
 
 1. Buka IntelliJ IDEA. Pilih **File → Open…** lalu arahkan ke direktori `backend/` (bukan root project). IntelliJ mendeteksinya sebagai proyek Maven dan mulai import.
 2. Tunggu sinkronisasi Maven selesai. Sinkronisasi pertama mengunduh dependency dan butuh beberapa menit.
-3. Buka `src/main/java/.../CallMonitoringApplication.java` (atau kelas utama `@SpringBootApplication`).
-4. Pastikan **Project SDK** diset ke **JDK 17**. IntelliJ akan meminta kalau belum ada.
-5. Buat **Run Configuration**:
-   - Klik **Add Configuration…** → **Application**.
-   - **Main class:** kelas `@SpringBootApplication`.
-   - **Environment variables:** isi nilai dari `backend/.env.example`, misalnya:
-     - `DB_URL=jdbc:postgresql://localhost:5432/cimb`
-     - `DB_USERNAME=postgres`
-     - `DB_PASSWORD=<nilai dari .env di root>`
-     - `CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000`
-   - **Active profiles:** `local`.
-6. Klik **Run**. Backend listen di `http://localhost:8080`.
+3. Buka `src/main/resources/application-local.yml` dan sesuaikan field `datasource` bila dibutuhkan
+4. Buka `src/main/java/.../CallMonitoringApplication.java` (atau kelas utama `@SpringBootApplication`).
+5. Pastikan **Project SDK** diset ke **JDK 17**. IntelliJ akan meminta kalau belum ada.
+6. Konfigurasikan Run config untuk menggunakan Active Profile `local`
+7. Klik **Run**. Backend listen di `http://localhost:8080`.
 
 > Tips: bisa juga dijalankan dari terminal di dalam `backend/`:
 >
@@ -136,7 +129,7 @@ docker compose ps
 > SPRING_PROFILES_ACTIVE=local \
 > DB_URL=jdbc:postgresql://localhost:5432/cimb \
 > DB_USERNAME=postgres \
-> DB_PASSWORD=replace-with-a-strong-password \
+> DB_PASSWORD=change-me-to-a-strong-random-value \
 > CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000 \
 > ./mvnw spring-boot:run
 > ```
