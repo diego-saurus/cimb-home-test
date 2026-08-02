@@ -1,6 +1,6 @@
 import { inject, type InjectionKey, type Ref } from 'vue'
 
-interface SortingContext {
+export interface SortingContext {
   sortBy: Ref<string>
   sortDirection: Ref<'asc' | 'desc'>
   toggleSortDirection: () => void

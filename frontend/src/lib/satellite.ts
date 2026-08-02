@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { SERVER_URL } from '@/lib/environment'
+
 export const satellite = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: `${SERVER_URL}/api`,
 })
